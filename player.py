@@ -27,19 +27,15 @@ class Player(CircleShape):
 
         if keys[pygame.K_a]:
             self.rotate(dt = (-1 * dt))
-            print(f"a, {self.rotation}")
 
         if keys[pygame.K_d]:
             self.rotate(dt = dt)
-            print(f"d, {self.rotation}")
         
         if keys[pygame.K_w]:
             self.move(dt = dt)
-            print(f"w {self.position}")
         
         if keys[pygame.K_s]:
             self.move(dt = (-1 * dt))
-            print(f"s {self.position}")
     
     def move(self, dt):
         unit_vector = pygame.Vector2(0, 1)
