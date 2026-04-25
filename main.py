@@ -53,11 +53,11 @@ def main():
 
         for asteroid in asteroids:
             if asteroid.colldides_with(player):
-                log_event("player_hit")
-                player.got_hit()
-                player.hit_box()
-                for asteroid in asteroids:
-                    asteroid.kill()
+                if player.secondry_collision_check(asteroid):
+                    log_event("player_hit")
+                    player.got_hit()
+                    for asteroid in asteroids:
+                        asteroid.kill()
             
             for shot in shots:
                 if asteroid.colldides_with(shot):

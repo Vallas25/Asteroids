@@ -12,21 +12,20 @@ class Player(CircleShape):
         self.score = START_SCORE
         self.lives = LIVES
         self.org_ship = pygame.image.load("assets/asteroid_ship.png").convert_alpha()
-        self.ship = pygame.transform.rotozoom(self.org_ship, self.rotation, 2)
-        self.rect = self.ship.get_rect(center = self.position)
+        self.image = pygame.transform.rotozoom(self.org_ship, self.rotation, 1)
+        self.rect = self.image.get_rect(center = self.position)
+        self.mask = pygame.mask.from_surface(self.image)
     
     # in the Player class
-    
-    def hit_box(self):
-        pass
 
     def draw(self, screen):
-       screen.blit(self.ship, self.rect)
+       screen.blit(self.image, self.rect)
     
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
-        self.ship = pygame.transform.rotozoom(self.org_ship, self.rotation, 2)
-        self.rect = self.ship.get_rect(center=self.position)
+        self.image = pygame.transform.rotozoom(self.org_ship, self.rotation, 1)
+        self.rect = self.image.get_rect(center=self.position)
+        self.mask = pygame.mask.from_surface(self.image)
     
     def update(self, dt):
         self.cooldown_timer -= dt
@@ -74,4 +73,4 @@ class Player(CircleShape):
             sys.exit()
     
     def secondry_collision_check(self, other):
-        pass
+        return pygame.sprite.collide_mask(self, other) is not None

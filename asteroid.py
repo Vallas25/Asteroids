@@ -6,18 +6,25 @@ import random
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
-    
-    def draw(self, screen):
+        surface = pygame.Surface((radius * 2, radius * 2), pygame.SRCALPHA)
         pygame.draw.circle(
-            surface= screen,
+            surface= surface,
             color= "white",
-            center= self.position,
-            radius= self.radius,
+            radius= radius,
+            center= (radius,radius),
             width= LINE_WIDTH
         )
+        self.image = surface
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect(center=self.position)
+
+    
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
     
     def update(self, dt):
         self.position += (self.velocity * dt)
+        self.rect.center = self.position
     
     def split(self):
         self.kill()
