@@ -6,9 +6,13 @@ from asteroidfield import *
 from shot import *
 from logger import log_state
 from logger import log_event
-import sys
 
 def main():
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
+    dt = 0
+    
     pygame.display.set_caption(CAPTION)
 
     updatable = pygame.sprite.Group()
@@ -26,10 +30,7 @@ def main():
     pygame.font.init()
     font = pygame.font.Font('freesansbold.ttf', 32)
 
-    pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
-    dt = 0
+    
     while True:
         log_state()
 
@@ -41,15 +42,22 @@ def main():
 
         updatable.update(dt=dt)
 
-        text = font.render(f"score: {player.score}", True, "white")
-        textRect = text.get_rect()
-        textRect.center = (round(SCREEN_WIDTH * 9/10),round(SCREEN_HEIGHT * 1/10))
-        screen.blit(text, textRect)
+        score = font.render(f"score: {player.score}", True, "white")
+        scoreRect = score.get_rect()
+        scoreRect.center = (round(SCREEN_WIDTH * 9/10),round(SCREEN_HEIGHT * 1/10))
+        screen.blit(score, scoreRect)
+        lives = font.render(f"lives: {player.lives}", True, "white")
+        livesRect = lives.get_rect()
+        livesRect.center = (round(SCREEN_WIDTH * 1/10),round(SCREEN_HEIGHT * 1/10))
+        screen.blit(lives, livesRect)
 
         for asteroid in asteroids:
             if asteroid.colldides_with(player):
                 log_event("player_hit")
-                sys.exit()
+                player.got_hit()
+                player.hit_box()
+                for asteroid in asteroids:
+                    asteroid.kill()
             
             for shot in shots:
                 if asteroid.colldides_with(shot):
